@@ -8,6 +8,7 @@ import Amplify from "aws-amplify"
 import config from "../../aws-exports"
 import DateFnUtils from "@date-io/date-fns"
 import SignIn from "../components/auth/SignIn"
+import AuthContext from "../context/authContext"
 import "../styles/App.css"
 Amplify.configure(config)
 
