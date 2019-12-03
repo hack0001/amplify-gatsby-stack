@@ -1,0 +1,69 @@
+type Conversation
+	@model
+	@auth(
+		rules: [
+			{ allow: owner, ownerField: "members" }
+			{ allow: groups, groups: ["Admin"] }
+		]
+	) {
+	id: ID!
+	associated: [ConvoLink] @connection(name: "AssociatedLinks")
+	createdAt: String
+	members: [String!]!
+	messages: [Message] @connection(name: "ConvoMsgs", sortField: "createdAt")
+	name: String!
+	updatedAt: String
+	subject: String
+	conversationCreator: String
+}
+
+type Message
+	@model(queries: null)
+	@auth(
+		rules: [
+			{ allow: owner, ownerField: "authorId" }
+			{ allow: groups, groups: ["Admin"] }
+		]
+	) {
+	id: ID
+	author: ChatUser @connection(name: "UserMessages", keyField: "authorId")
+	authorId: String
+	content: String!
+	conversation: Conversation! @connection(name: "ConvoMsgs")
+	createdAt: String
+	messageConversationId: ID!
+	updatedAt: String
+}
+
+type ConvoLink
+	@model(queries: null)
+	@auth(rules: [{ allow: owner }, { allow: groups, groups: ["Admin"] }]) {
+	id: ID!
+	convoLinkUserId: ID
+	conversation: Conversation! @connection(name: "AssociatedLinks")
+	convoLinkConversationId: ID!
+	createdAt: String
+	updatedAt: String
+	user: ChatUser! @connection(name: "UserLinks")
+}
+
+type ChatUser
+	@model(subscriptions: null)
+	@auth(
+		rules: [
+			{ allow: owner, ownerField: "creator" }
+			{ allow: groups, groups: ["Admin"] }
+		]
+	) {
+	id: ID
+	username: String!
+	creator: ID
+	conversations: [ConvoLink] @connection(name: "UserLinks")
+	messages: [Message] @connection(name: "UserMessages")
+	createdAt: String
+	updatedAt: String
+	alias: String
+	imageLink: String
+	profilePic: String
+	user: User @connection(name: "chatUsers")
+}

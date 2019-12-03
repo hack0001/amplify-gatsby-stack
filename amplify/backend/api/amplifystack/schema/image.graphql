@@ -1,0 +1,17 @@
+type Image @model @auth(rules: [{ allow: groups, groups: ["Admin"] }]) {
+	id: ID
+	name: String!
+	description: String
+	image: String
+	category: String
+	type: String
+	size: String
+	height: String
+	width: String
+	imageAttribution: String
+	imageAttributionLink: String
+	createdAt: String
+	updatedAt: String
+	access: String
+	tags: [String]
+}

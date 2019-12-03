@@ -1,0 +1,1266 @@
+type CalendarMonth {
+  id: ID!
+  createdAt: String
+  day(filter: ModelCalendarDayFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelCalendarDayConnection
+  month: String
+  updatedAt: String
+}
+
+type CalendarDay {
+  id: ID!
+  calendarMonth: CalendarMonth
+  category: String
+  createdAt: String
+  description: String!
+  eventName: String!
+  updatedAt: String
+  site: String
+  year: String
+  day: String
+}
+
+type Conversation {
+  id: ID!
+  associated(filter: ModelConvoLinkFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelConvoLinkConnection
+  createdAt: String
+  members: [String!]!
+  messages(filter: ModelMessageFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelMessageConnection
+  name: String!
+  updatedAt: String
+  subject: String
+  conversationCreator: String
+}
+
+type Message {
+  id: ID
+  author: ChatUser
+  authorId: String
+  content: String!
+  conversation: Conversation!
+  createdAt: String
+  messageConversationId: ID!
+  updatedAt: String
+}
+
+type ConvoLink {
+  id: ID!
+  convoLinkUserId: ID
+  conversation: Conversation!
+  convoLinkConversationId: ID!
+  createdAt: String
+  updatedAt: String
+  user: ChatUser!
+  owner: String
+}
+
+type ChatUser {
+  id: ID
+  username: String!
+  creator: ID
+  conversations(filter: ModelConvoLinkFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelConvoLinkConnection
+  messages(filter: ModelMessageFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelMessageConnection
+  createdAt: String
+  updatedAt: String
+  alias: String
+  imageLink: String
+  profilePic: String
+  user: User
+}
+
+type Image {
+  id: ID
+  name: String!
+  description: String
+  image: String
+  category: String
+  type: String
+  size: String
+  height: String
+  width: String
+  imageAttribution: String
+  imageAttributionLink: String
+  createdAt: String
+  updatedAt: String
+  access: String
+  tags: [String]
+}
+
+type Site {
+  id: ID
+  articles(filter: ModelArticleFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelArticleConnection
+  duplicateArticles(filter: ModelDuplicateArticleFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelDuplicateArticleConnection
+  createdAt: String
+  description: String
+  tasks(filter: ModelTaskFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelTaskConnection
+  name: String
+  type: String
+  categories: [String]
+  development: Boolean!
+  production: Boolean!
+  productionId: String
+  quiz(filter: ModelQuizFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelQuizConnection
+  duplicateQuiz(filter: ModelDuplicateQuizFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelDuplicateQuizConnection
+  slideShows(filter: ModelSlideShowFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelSlideShowConnection
+  duplicateSlideShows(filter: ModelDuplicateSlideShowFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelDuplicateSlideShowConnection
+  updatedAt: String
+}
+
+type Article {
+  id: ID
+  userId: ID
+  authorName: String
+  overview: [String]
+  createdAt: String
+  content: String
+  development: Boolean!
+  production: Boolean!
+  productionId: String
+  schedule: Boolean
+  scheduleTime: String
+  original: Boolean
+  duplicates(filter: ModelDuplicateArticleFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelDuplicateArticleConnection
+  site: Site
+  updatedAt: String
+  user: User
+}
+
+type DuplicateArticle {
+  id: ID
+  overview: [String]
+  createdAt: String
+  content: String
+  development: Boolean!
+  production: Boolean!
+  productionId: String
+  schedule: Boolean
+  scheduleTime: String
+  original: Boolean
+  originalArticle: Article
+  site: Site
+  updatedAt: String
+  user: User
+}
+
+type SlideShow {
+  id: ID
+  category: String
+  createdAt: String
+  development: Boolean!
+  overview: [String]
+  production: Boolean!
+  productionId: String
+  slides: [String]
+  numSlides: Int
+  original: Boolean
+  schedule: Boolean
+  scheduleTime: String
+  duplicates(filter: ModelDuplicateSlideShowFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelDuplicateSlideShowConnection
+  site: Site
+  user: User
+  updatedAt: String
+}
+
+type DuplicateSlideShow {
+  id: ID
+  category: String
+  createdAt: String
+  development: Boolean!
+  overview: [String]
+  production: Boolean!
+  productionId: String
+  slides: [String]
+  numSlides: Int
+  original: Boolean
+  originalSlideShow: SlideShow
+  schedule: Boolean
+  scheduleTime: String
+  site: Site
+  user: User
+  updatedAt: String
+}
+
+type Quiz {
+  id: ID
+  category: String
+  createdAt: String
+  development: Boolean!
+  overview: [String]
+  production: Boolean!
+  productionId: String
+  original: Boolean
+  questions: [String]
+  numQuestions: Int
+  schedule: Boolean
+  scheduleTime: String
+  duplicates(filter: ModelDuplicateQuizFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelDuplicateQuizConnection
+  site: Site
+  user: User
+  updatedAt: String
+}
+
+type DuplicateQuiz {
+  id: ID
+  category: String
+  createdAt: String
+  development: Boolean!
+  overview: [String]
+  production: Boolean!
+  productionId: String
+  original: Boolean
+  questions: [String]
+  numQuestions: Int
+  schedule: Boolean
+  scheduleTime: String
+  originalQuiz: Quiz
+  site: Site
+  user: User
+  updatedAt: String
+}
+
+type Task {
+  id: ID!
+  category: String
+  createdAt: String
+  content: String
+  site: Site
+  siteId: ID
+  userId: ID
+  members: [String]
+  name: String
+  updatedAt: String
+  type: String
+  title: String
+  status: String
+  user: User
+}
+
+type User {
+  id: ID
+  userId: ID
+  creator: ID
+  articles(filter: ModelArticleFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelArticleConnection
+  duplicateArticles(filter: ModelDuplicateArticleFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelDuplicateArticleConnection
+  createdAt: String
+  ideas(filter: ModelTaskFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelTaskConnection
+  quiz(filter: ModelQuizFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelQuizConnection
+  duplicateQuiz(filter: ModelDuplicateQuizFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelDuplicateQuizConnection
+  slideShows(filter: ModelSlideShowFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelSlideShowConnection
+  duplicateSlideShows(filter: ModelDuplicateSlideShowFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelDuplicateSlideShowConnection
+  updatedAt: String
+  username: String!
+  overview: [String]
+  chatUser: ChatUser
+}
+
+enum ModelSortDirection {
+  ASC
+  DESC
+}
+
+type ModelCalendarMonthConnection {
+  items: [CalendarMonth]
+  nextToken: String
+}
+
+input ModelStringFilterInput {
+  ne: String
+  eq: String
+  le: String
+  lt: String
+  ge: String
+  gt: String
+  contains: String
+  notContains: String
+  between: [String]
+  beginsWith: String
+}
+
+input ModelIDFilterInput {
+  ne: ID
+  eq: ID
+  le: ID
+  lt: ID
+  ge: ID
+  gt: ID
+  contains: ID
+  notContains: ID
+  between: [ID]
+  beginsWith: ID
+}
+
+input ModelIntFilterInput {
+  ne: Int
+  eq: Int
+  le: Int
+  lt: Int
+  ge: Int
+  gt: Int
+  contains: Int
+  notContains: Int
+  between: [Int]
+}
+
+input ModelFloatFilterInput {
+  ne: Float
+  eq: Float
+  le: Float
+  lt: Float
+  ge: Float
+  gt: Float
+  contains: Float
+  notContains: Float
+  between: [Float]
+}
+
+input ModelBooleanFilterInput {
+  ne: Boolean
+  eq: Boolean
+}
+
+input ModelCalendarMonthFilterInput {
+  id: ModelIDFilterInput
+  createdAt: ModelStringFilterInput
+  month: ModelStringFilterInput
+  updatedAt: ModelStringFilterInput
+  and: [ModelCalendarMonthFilterInput]
+  or: [ModelCalendarMonthFilterInput]
+  not: ModelCalendarMonthFilterInput
+}
+
+type Query {
+  getCalendarMonth(id: ID!): CalendarMonth
+  listCalendarMonths(filter: ModelCalendarMonthFilterInput, limit: Int, nextToken: String): ModelCalendarMonthConnection
+  getCalendarDay(id: ID!): CalendarDay
+  listCalendarDays(filter: ModelCalendarDayFilterInput, limit: Int, nextToken: String): ModelCalendarDayConnection
+  getConversation(id: ID!): Conversation
+  listConversations(filter: ModelConversationFilterInput, limit: Int, nextToken: String): ModelConversationConnection
+  getChatUser(id: ID!): ChatUser
+  listChatUsers(filter: ModelChatUserFilterInput, limit: Int, nextToken: String): ModelChatUserConnection
+  getImage(id: ID!): Image
+  listImages(filter: ModelImageFilterInput, limit: Int, nextToken: String): ModelImageConnection
+  getSite(id: ID!): Site
+  listSites(filter: ModelSiteFilterInput, limit: Int, nextToken: String): ModelSiteConnection
+  getArticle(id: ID!): Article
+  listArticles(filter: ModelArticleFilterInput, limit: Int, nextToken: String): ModelArticleConnection
+  getDuplicateArticle(id: ID!): DuplicateArticle
+  listDuplicateArticles(filter: ModelDuplicateArticleFilterInput, limit: Int, nextToken: String): ModelDuplicateArticleConnection
+  getSlideShow(id: ID!): SlideShow
+  listSlideShows(filter: ModelSlideShowFilterInput, limit: Int, nextToken: String): ModelSlideShowConnection
+  getDuplicateSlideShow(id: ID!): DuplicateSlideShow
+  listDuplicateSlideShows(filter: ModelDuplicateSlideShowFilterInput, limit: Int, nextToken: String): ModelDuplicateSlideShowConnection
+  getQuiz(id: ID!): Quiz
+  listQuizs(filter: ModelQuizFilterInput, limit: Int, nextToken: String): ModelQuizConnection
+  getDuplicateQuiz(id: ID!): DuplicateQuiz
+  listDuplicateQuizs(filter: ModelDuplicateQuizFilterInput, limit: Int, nextToken: String): ModelDuplicateQuizConnection
+  getTask(id: ID!): Task
+  listTasks(filter: ModelTaskFilterInput, limit: Int, nextToken: String): ModelTaskConnection
+  getUser(id: ID!): User
+  listUsers(filter: ModelUserFilterInput, limit: Int, nextToken: String): ModelUserConnection
+}
+
+input CreateCalendarMonthInput {
+  id: ID
+  createdAt: String
+  month: String
+  updatedAt: String
+}
+
+input UpdateCalendarMonthInput {
+  id: ID!
+  createdAt: String
+  month: String
+  updatedAt: String
+}
+
+input DeleteCalendarMonthInput {
+  id: ID
+}
+
+type Mutation {
+  createCalendarMonth(input: CreateCalendarMonthInput!): CalendarMonth
+  updateCalendarMonth(input: UpdateCalendarMonthInput!): CalendarMonth
+  deleteCalendarMonth(input: DeleteCalendarMonthInput!): CalendarMonth
+  createCalendarDay(input: CreateCalendarDayInput!): CalendarDay
+  updateCalendarDay(input: UpdateCalendarDayInput!): CalendarDay
+  deleteCalendarDay(input: DeleteCalendarDayInput!): CalendarDay
+  createConversation(input: CreateConversationInput!): Conversation
+  updateConversation(input: UpdateConversationInput!): Conversation
+  deleteConversation(input: DeleteConversationInput!): Conversation
+  createMessage(input: CreateMessageInput!): Message
+  updateMessage(input: UpdateMessageInput!): Message
+  deleteMessage(input: DeleteMessageInput!): Message
+  createConvoLink(input: CreateConvoLinkInput!): ConvoLink
+  updateConvoLink(input: UpdateConvoLinkInput!): ConvoLink
+  deleteConvoLink(input: DeleteConvoLinkInput!): ConvoLink
+  createChatUser(input: CreateChatUserInput!): ChatUser
+  updateChatUser(input: UpdateChatUserInput!): ChatUser
+  deleteChatUser(input: DeleteChatUserInput!): ChatUser
+  createImage(input: CreateImageInput!): Image
+  updateImage(input: UpdateImageInput!): Image
+  deleteImage(input: DeleteImageInput!): Image
+  createSite(input: CreateSiteInput!): Site
+  updateSite(input: UpdateSiteInput!): Site
+  deleteSite(input: DeleteSiteInput!): Site
+  createArticle(input: CreateArticleInput!): Article
+  updateArticle(input: UpdateArticleInput!): Article
+  deleteArticle(input: DeleteArticleInput!): Article
+  createDuplicateArticle(input: CreateDuplicateArticleInput!): DuplicateArticle
+  updateDuplicateArticle(input: UpdateDuplicateArticleInput!): DuplicateArticle
+  deleteDuplicateArticle(input: DeleteDuplicateArticleInput!): DuplicateArticle
+  createSlideShow(input: CreateSlideShowInput!): SlideShow
+  updateSlideShow(input: UpdateSlideShowInput!): SlideShow
+  deleteSlideShow(input: DeleteSlideShowInput!): SlideShow
+  createDuplicateSlideShow(input: CreateDuplicateSlideShowInput!): DuplicateSlideShow
+  updateDuplicateSlideShow(input: UpdateDuplicateSlideShowInput!): DuplicateSlideShow
+  deleteDuplicateSlideShow(input: DeleteDuplicateSlideShowInput!): DuplicateSlideShow
+  createQuiz(input: CreateQuizInput!): Quiz
+  updateQuiz(input: UpdateQuizInput!): Quiz
+  deleteQuiz(input: DeleteQuizInput!): Quiz
+  createDuplicateQuiz(input: CreateDuplicateQuizInput!): DuplicateQuiz
+  updateDuplicateQuiz(input: UpdateDuplicateQuizInput!): DuplicateQuiz
+  deleteDuplicateQuiz(input: DeleteDuplicateQuizInput!): DuplicateQuiz
+  createTask(input: CreateTaskInput!): Task
+  updateTask(input: UpdateTaskInput!): Task
+  deleteTask(input: DeleteTaskInput!): Task
+  createUser(input: CreateUserInput!): User
+  updateUser(input: UpdateUserInput!): User
+  deleteUser(input: DeleteUserInput!): User
+}
+
+type ModelCalendarDayConnection {
+  items: [CalendarDay]
+  nextToken: String
+}
+
+input ModelCalendarDayFilterInput {
+  id: ModelIDFilterInput
+  category: ModelStringFilterInput
+  createdAt: ModelStringFilterInput
+  description: ModelStringFilterInput
+  eventName: ModelStringFilterInput
+  updatedAt: ModelStringFilterInput
+  site: ModelStringFilterInput
+  year: ModelStringFilterInput
+  day: ModelStringFilterInput
+  and: [ModelCalendarDayFilterInput]
+  or: [ModelCalendarDayFilterInput]
+  not: ModelCalendarDayFilterInput
+}
+
+input CreateCalendarDayInput {
+  id: ID
+  category: String
+  createdAt: String
+  description: String!
+  eventName: String!
+  updatedAt: String
+  site: String
+  year: String
+  day: String
+  calendarDayCalendarMonthId: ID
+}
+
+input UpdateCalendarDayInput {
+  id: ID!
+  category: String
+  createdAt: String
+  description: String
+  eventName: String
+  updatedAt: String
+  site: String
+  year: String
+  day: String
+  calendarDayCalendarMonthId: ID
+}
+
+input DeleteCalendarDayInput {
+  id: ID
+}
+
+type ModelConversationConnection {
+  items: [Conversation]
+  nextToken: String
+}
+
+input ModelConversationFilterInput {
+  id: ModelIDFilterInput
+  createdAt: ModelStringFilterInput
+  members: ModelStringFilterInput
+  name: ModelStringFilterInput
+  updatedAt: ModelStringFilterInput
+  subject: ModelStringFilterInput
+  conversationCreator: ModelStringFilterInput
+  and: [ModelConversationFilterInput]
+  or: [ModelConversationFilterInput]
+  not: ModelConversationFilterInput
+}
+
+input CreateConversationInput {
+  id: ID
+  createdAt: String
+  members: [String!]!
+  name: String!
+  updatedAt: String
+  subject: String
+  conversationCreator: String
+}
+
+input UpdateConversationInput {
+  id: ID!
+  createdAt: String
+  members: [String!]
+  name: String
+  updatedAt: String
+  subject: String
+  conversationCreator: String
+}
+
+input DeleteConversationInput {
+  id: ID
+}
+
+type Subscription {
+  onCreateConversation: Conversation @aws_subscribe(mutations: ["createConversation"])
+  onUpdateConversation: Conversation @aws_subscribe(mutations: ["updateConversation"])
+  onDeleteConversation: Conversation @aws_subscribe(mutations: ["deleteConversation"])
+  onCreateMessage: Message @aws_subscribe(mutations: ["createMessage"])
+  onUpdateMessage: Message @aws_subscribe(mutations: ["updateMessage"])
+  onDeleteMessage: Message @aws_subscribe(mutations: ["deleteMessage"])
+  onCreateConvoLink(owner: String): ConvoLink @aws_subscribe(mutations: ["createConvoLink"])
+  onUpdateConvoLink(owner: String): ConvoLink @aws_subscribe(mutations: ["updateConvoLink"])
+  onDeleteConvoLink(owner: String): ConvoLink @aws_subscribe(mutations: ["deleteConvoLink"])
+  onCreateImage: Image @aws_subscribe(mutations: ["createImage"])
+  onUpdateImage: Image @aws_subscribe(mutations: ["updateImage"])
+  onDeleteImage: Image @aws_subscribe(mutations: ["deleteImage"])
+  onCreateTask: Task @aws_subscribe(mutations: ["createTask"])
+  onUpdateTask: Task @aws_subscribe(mutations: ["updateTask"])
+  onDeleteTask: Task @aws_subscribe(mutations: ["deleteTask"])
+}
+
+input ModelMessageFilterInput {
+  id: ModelIDFilterInput
+  authorId: ModelStringFilterInput
+  content: ModelStringFilterInput
+  createdAt: ModelStringFilterInput
+  messageConversationId: ModelIDFilterInput
+  updatedAt: ModelStringFilterInput
+  and: [ModelMessageFilterInput]
+  or: [ModelMessageFilterInput]
+  not: ModelMessageFilterInput
+}
+
+input CreateMessageInput {
+  id: ID
+  authorId: String
+  content: String!
+  createdAt: String
+  messageConversationId: ID!
+  updatedAt: String
+}
+
+input UpdateMessageInput {
+  id: ID!
+  authorId: String
+  content: String
+  createdAt: String
+  messageConversationId: ID
+  updatedAt: String
+}
+
+input DeleteMessageInput {
+  id: ID
+}
+
+input ModelConvoLinkFilterInput {
+  id: ModelIDFilterInput
+  convoLinkUserId: ModelIDFilterInput
+  convoLinkConversationId: ModelIDFilterInput
+  createdAt: ModelStringFilterInput
+  updatedAt: ModelStringFilterInput
+  and: [ModelConvoLinkFilterInput]
+  or: [ModelConvoLinkFilterInput]
+  not: ModelConvoLinkFilterInput
+}
+
+input CreateConvoLinkInput {
+  id: ID
+  convoLinkUserId: ID
+  convoLinkConversationId: ID!
+  createdAt: String
+  updatedAt: String
+}
+
+input UpdateConvoLinkInput {
+  id: ID!
+  convoLinkUserId: ID
+  convoLinkConversationId: ID
+  createdAt: String
+  updatedAt: String
+}
+
+input DeleteConvoLinkInput {
+  id: ID
+}
+
+type ModelChatUserConnection {
+  items: [ChatUser]
+  nextToken: String
+}
+
+input ModelChatUserFilterInput {
+  id: ModelIDFilterInput
+  username: ModelStringFilterInput
+  creator: ModelIDFilterInput
+  createdAt: ModelStringFilterInput
+  updatedAt: ModelStringFilterInput
+  alias: ModelStringFilterInput
+  imageLink: ModelStringFilterInput
+  profilePic: ModelStringFilterInput
+  and: [ModelChatUserFilterInput]
+  or: [ModelChatUserFilterInput]
+  not: ModelChatUserFilterInput
+}
+
+input CreateChatUserInput {
+  id: ID
+  username: String!
+  creator: ID
+  createdAt: String
+  updatedAt: String
+  alias: String
+  imageLink: String
+  profilePic: String
+  chatUserUserId: ID
+}
+
+input UpdateChatUserInput {
+  id: ID!
+  username: String
+  creator: ID
+  createdAt: String
+  updatedAt: String
+  alias: String
+  imageLink: String
+  profilePic: String
+  chatUserUserId: ID
+}
+
+input DeleteChatUserInput {
+  id: ID
+}
+
+type ModelImageConnection {
+  items: [Image]
+  nextToken: String
+}
+
+input ModelImageFilterInput {
+  id: ModelIDFilterInput
+  name: ModelStringFilterInput
+  description: ModelStringFilterInput
+  image: ModelStringFilterInput
+  category: ModelStringFilterInput
+  type: ModelStringFilterInput
+  size: ModelStringFilterInput
+  height: ModelStringFilterInput
+  width: ModelStringFilterInput
+  imageAttribution: ModelStringFilterInput
+  imageAttributionLink: ModelStringFilterInput
+  createdAt: ModelStringFilterInput
+  updatedAt: ModelStringFilterInput
+  access: ModelStringFilterInput
+  tags: ModelStringFilterInput
+  and: [ModelImageFilterInput]
+  or: [ModelImageFilterInput]
+  not: ModelImageFilterInput
+}
+
+input CreateImageInput {
+  id: ID
+  name: String!
+  description: String
+  image: String
+  category: String
+  type: String
+  size: String
+  height: String
+  width: String
+  imageAttribution: String
+  imageAttributionLink: String
+  createdAt: String
+  updatedAt: String
+  access: String
+  tags: [String]
+}
+
+input UpdateImageInput {
+  id: ID!
+  name: String
+  description: String
+  image: String
+  category: String
+  type: String
+  size: String
+  height: String
+  width: String
+  imageAttribution: String
+  imageAttributionLink: String
+  createdAt: String
+  updatedAt: String
+  access: String
+  tags: [String]
+}
+
+input DeleteImageInput {
+  id: ID
+}
+
+type ModelSiteConnection {
+  items: [Site]
+  nextToken: String
+}
+
+input ModelSiteFilterInput {
+  id: ModelIDFilterInput
+  createdAt: ModelStringFilterInput
+  description: ModelStringFilterInput
+  name: ModelStringFilterInput
+  type: ModelStringFilterInput
+  categories: ModelStringFilterInput
+  development: ModelBooleanFilterInput
+  production: ModelBooleanFilterInput
+  productionId: ModelStringFilterInput
+  updatedAt: ModelStringFilterInput
+  and: [ModelSiteFilterInput]
+  or: [ModelSiteFilterInput]
+  not: ModelSiteFilterInput
+}
+
+input CreateSiteInput {
+  id: ID
+  createdAt: String
+  description: String
+  name: String
+  type: String
+  categories: [String]
+  development: Boolean!
+  production: Boolean!
+  productionId: String
+  updatedAt: String
+}
+
+input UpdateSiteInput {
+  id: ID!
+  createdAt: String
+  description: String
+  name: String
+  type: String
+  categories: [String]
+  development: Boolean
+  production: Boolean
+  productionId: String
+  updatedAt: String
+}
+
+input DeleteSiteInput {
+  id: ID
+}
+
+type ModelArticleConnection {
+  items: [Article]
+  nextToken: String
+}
+
+input ModelArticleFilterInput {
+  id: ModelIDFilterInput
+  userId: ModelIDFilterInput
+  authorName: ModelStringFilterInput
+  overview: ModelStringFilterInput
+  createdAt: ModelStringFilterInput
+  content: ModelStringFilterInput
+  development: ModelBooleanFilterInput
+  production: ModelBooleanFilterInput
+  productionId: ModelStringFilterInput
+  schedule: ModelBooleanFilterInput
+  scheduleTime: ModelStringFilterInput
+  original: ModelBooleanFilterInput
+  updatedAt: ModelStringFilterInput
+  and: [ModelArticleFilterInput]
+  or: [ModelArticleFilterInput]
+  not: ModelArticleFilterInput
+}
+
+input CreateArticleInput {
+  id: ID
+  userId: ID
+  authorName: String
+  overview: [String]
+  createdAt: String
+  content: String
+  development: Boolean!
+  production: Boolean!
+  productionId: String
+  schedule: Boolean
+  scheduleTime: String
+  original: Boolean
+  updatedAt: String
+  articleSiteId: ID
+  articleUserId: ID
+}
+
+input UpdateArticleInput {
+  id: ID!
+  userId: ID
+  authorName: String
+  overview: [String]
+  createdAt: String
+  content: String
+  development: Boolean
+  production: Boolean
+  productionId: String
+  schedule: Boolean
+  scheduleTime: String
+  original: Boolean
+  updatedAt: String
+  articleSiteId: ID
+  articleUserId: ID
+}
+
+input DeleteArticleInput {
+  id: ID
+}
+
+type ModelDuplicateArticleConnection {
+  items: [DuplicateArticle]
+  nextToken: String
+}
+
+input ModelDuplicateArticleFilterInput {
+  id: ModelIDFilterInput
+  overview: ModelStringFilterInput
+  createdAt: ModelStringFilterInput
+  content: ModelStringFilterInput
+  development: ModelBooleanFilterInput
+  production: ModelBooleanFilterInput
+  productionId: ModelStringFilterInput
+  schedule: ModelBooleanFilterInput
+  scheduleTime: ModelStringFilterInput
+  original: ModelBooleanFilterInput
+  updatedAt: ModelStringFilterInput
+  and: [ModelDuplicateArticleFilterInput]
+  or: [ModelDuplicateArticleFilterInput]
+  not: ModelDuplicateArticleFilterInput
+}
+
+input CreateDuplicateArticleInput {
+  id: ID
+  overview: [String]
+  createdAt: String
+  content: String
+  development: Boolean!
+  production: Boolean!
+  productionId: String
+  schedule: Boolean
+  scheduleTime: String
+  original: Boolean
+  updatedAt: String
+  duplicateArticleOriginalArticleId: ID
+  duplicateArticleSiteId: ID
+  duplicateArticleUserId: ID
+}
+
+input UpdateDuplicateArticleInput {
+  id: ID!
+  overview: [String]
+  createdAt: String
+  content: String
+  development: Boolean
+  production: Boolean
+  productionId: String
+  schedule: Boolean
+  scheduleTime: String
+  original: Boolean
+  updatedAt: String
+  duplicateArticleOriginalArticleId: ID
+  duplicateArticleSiteId: ID
+  duplicateArticleUserId: ID
+}
+
+input DeleteDuplicateArticleInput {
+  id: ID
+}
+
+type ModelSlideShowConnection {
+  items: [SlideShow]
+  nextToken: String
+}
+
+input ModelSlideShowFilterInput {
+  id: ModelIDFilterInput
+  category: ModelStringFilterInput
+  createdAt: ModelStringFilterInput
+  development: ModelBooleanFilterInput
+  overview: ModelStringFilterInput
+  production: ModelBooleanFilterInput
+  productionId: ModelStringFilterInput
+  slides: ModelStringFilterInput
+  numSlides: ModelIntFilterInput
+  original: ModelBooleanFilterInput
+  schedule: ModelBooleanFilterInput
+  scheduleTime: ModelStringFilterInput
+  updatedAt: ModelStringFilterInput
+  and: [ModelSlideShowFilterInput]
+  or: [ModelSlideShowFilterInput]
+  not: ModelSlideShowFilterInput
+}
+
+input CreateSlideShowInput {
+  id: ID
+  category: String
+  createdAt: String
+  development: Boolean!
+  overview: [String]
+  production: Boolean!
+  productionId: String
+  slides: [String]
+  numSlides: Int
+  original: Boolean
+  schedule: Boolean
+  scheduleTime: String
+  updatedAt: String
+  slideShowSiteId: ID
+  slideShowUserId: ID
+}
+
+input UpdateSlideShowInput {
+  id: ID!
+  category: String
+  createdAt: String
+  development: Boolean
+  overview: [String]
+  production: Boolean
+  productionId: String
+  slides: [String]
+  numSlides: Int
+  original: Boolean
+  schedule: Boolean
+  scheduleTime: String
+  updatedAt: String
+  slideShowSiteId: ID
+  slideShowUserId: ID
+}
+
+input DeleteSlideShowInput {
+  id: ID
+}
+
+type ModelDuplicateSlideShowConnection {
+  items: [DuplicateSlideShow]
+  nextToken: String
+}
+
+input ModelDuplicateSlideShowFilterInput {
+  id: ModelIDFilterInput
+  category: ModelStringFilterInput
+  createdAt: ModelStringFilterInput
+  development: ModelBooleanFilterInput
+  overview: ModelStringFilterInput
+  production: ModelBooleanFilterInput
+  productionId: ModelStringFilterInput
+  slides: ModelStringFilterInput
+  numSlides: ModelIntFilterInput
+  original: ModelBooleanFilterInput
+  schedule: ModelBooleanFilterInput
+  scheduleTime: ModelStringFilterInput
+  updatedAt: ModelStringFilterInput
+  and: [ModelDuplicateSlideShowFilterInput]
+  or: [ModelDuplicateSlideShowFilterInput]
+  not: ModelDuplicateSlideShowFilterInput
+}
+
+input CreateDuplicateSlideShowInput {
+  id: ID
+  category: String
+  createdAt: String
+  development: Boolean!
+  overview: [String]
+  production: Boolean!
+  productionId: String
+  slides: [String]
+  numSlides: Int
+  original: Boolean
+  schedule: Boolean
+  scheduleTime: String
+  updatedAt: String
+  duplicateSlideShowOriginalSlideShowId: ID
+  duplicateSlideShowSiteId: ID
+  duplicateSlideShowUserId: ID
+}
+
+input UpdateDuplicateSlideShowInput {
+  id: ID!
+  category: String
+  createdAt: String
+  development: Boolean
+  overview: [String]
+  production: Boolean
+  productionId: String
+  slides: [String]
+  numSlides: Int
+  original: Boolean
+  schedule: Boolean
+  scheduleTime: String
+  updatedAt: String
+  duplicateSlideShowOriginalSlideShowId: ID
+  duplicateSlideShowSiteId: ID
+  duplicateSlideShowUserId: ID
+}
+
+input DeleteDuplicateSlideShowInput {
+  id: ID
+}
+
+type ModelQuizConnection {
+  items: [Quiz]
+  nextToken: String
+}
+
+input ModelQuizFilterInput {
+  id: ModelIDFilterInput
+  category: ModelStringFilterInput
+  createdAt: ModelStringFilterInput
+  development: ModelBooleanFilterInput
+  overview: ModelStringFilterInput
+  production: ModelBooleanFilterInput
+  productionId: ModelStringFilterInput
+  original: ModelBooleanFilterInput
+  questions: ModelStringFilterInput
+  numQuestions: ModelIntFilterInput
+  schedule: ModelBooleanFilterInput
+  scheduleTime: ModelStringFilterInput
+  updatedAt: ModelStringFilterInput
+  and: [ModelQuizFilterInput]
+  or: [ModelQuizFilterInput]
+  not: ModelQuizFilterInput
+}
+
+input CreateQuizInput {
+  id: ID
+  category: String
+  createdAt: String
+  development: Boolean!
+  overview: [String]
+  production: Boolean!
+  productionId: String
+  original: Boolean
+  questions: [String]
+  numQuestions: Int
+  schedule: Boolean
+  scheduleTime: String
+  updatedAt: String
+  quizSiteId: ID
+  quizUserId: ID
+}
+
+input UpdateQuizInput {
+  id: ID!
+  category: String
+  createdAt: String
+  development: Boolean
+  overview: [String]
+  production: Boolean
+  productionId: String
+  original: Boolean
+  questions: [String]
+  numQuestions: Int
+  schedule: Boolean
+  scheduleTime: String
+  updatedAt: String
+  quizSiteId: ID
+  quizUserId: ID
+}
+
+input DeleteQuizInput {
+  id: ID
+}
+
+type ModelDuplicateQuizConnection {
+  items: [DuplicateQuiz]
+  nextToken: String
+}
+
+input ModelDuplicateQuizFilterInput {
+  id: ModelIDFilterInput
+  category: ModelStringFilterInput
+  createdAt: ModelStringFilterInput
+  development: ModelBooleanFilterInput
+  overview: ModelStringFilterInput
+  production: ModelBooleanFilterInput
+  productionId: ModelStringFilterInput
+  original: ModelBooleanFilterInput
+  questions: ModelStringFilterInput
+  numQuestions: ModelIntFilterInput
+  schedule: ModelBooleanFilterInput
+  scheduleTime: ModelStringFilterInput
+  updatedAt: ModelStringFilterInput
+  and: [ModelDuplicateQuizFilterInput]
+  or: [ModelDuplicateQuizFilterInput]
+  not: ModelDuplicateQuizFilterInput
+}
+
+input CreateDuplicateQuizInput {
+  id: ID
+  category: String
+  createdAt: String
+  development: Boolean!
+  overview: [String]
+  production: Boolean!
+  productionId: String
+  original: Boolean
+  questions: [String]
+  numQuestions: Int
+  schedule: Boolean
+  scheduleTime: String
+  updatedAt: String
+  duplicateQuizOriginalQuizId: ID
+  duplicateQuizSiteId: ID
+  duplicateQuizUserId: ID
+}
+
+input UpdateDuplicateQuizInput {
+  id: ID!
+  category: String
+  createdAt: String
+  development: Boolean
+  overview: [String]
+  production: Boolean
+  productionId: String
+  original: Boolean
+  questions: [String]
+  numQuestions: Int
+  schedule: Boolean
+  scheduleTime: String
+  updatedAt: String
+  duplicateQuizOriginalQuizId: ID
+  duplicateQuizSiteId: ID
+  duplicateQuizUserId: ID
+}
+
+input DeleteDuplicateQuizInput {
+  id: ID
+}
+
+type ModelTaskConnection {
+  items: [Task]
+  nextToken: String
+}
+
+input ModelTaskFilterInput {
+  id: ModelIDFilterInput
+  category: ModelStringFilterInput
+  createdAt: ModelStringFilterInput
+  content: ModelStringFilterInput
+  siteId: ModelIDFilterInput
+  userId: ModelIDFilterInput
+  members: ModelStringFilterInput
+  name: ModelStringFilterInput
+  updatedAt: ModelStringFilterInput
+  type: ModelStringFilterInput
+  title: ModelStringFilterInput
+  status: ModelStringFilterInput
+  and: [ModelTaskFilterInput]
+  or: [ModelTaskFilterInput]
+  not: ModelTaskFilterInput
+}
+
+input CreateTaskInput {
+  id: ID
+  category: String
+  createdAt: String
+  content: String
+  siteId: ID
+  userId: ID
+  members: [String]
+  name: String
+  updatedAt: String
+  type: String
+  title: String
+  status: String
+  taskSiteId: ID
+  taskUserId: ID
+}
+
+input UpdateTaskInput {
+  id: ID!
+  category: String
+  createdAt: String
+  content: String
+  siteId: ID
+  userId: ID
+  members: [String]
+  name: String
+  updatedAt: String
+  type: String
+  title: String
+  status: String
+  taskSiteId: ID
+  taskUserId: ID
+}
+
+input DeleteTaskInput {
+  id: ID
+}
+
+type ModelUserConnection {
+  items: [User]
+  nextToken: String
+}
+
+input ModelUserFilterInput {
+  id: ModelIDFilterInput
+  userId: ModelIDFilterInput
+  creator: ModelIDFilterInput
+  createdAt: ModelStringFilterInput
+  updatedAt: ModelStringFilterInput
+  username: ModelStringFilterInput
+  overview: ModelStringFilterInput
+  and: [ModelUserFilterInput]
+  or: [ModelUserFilterInput]
+  not: ModelUserFilterInput
+}
+
+input CreateUserInput {
+  id: ID
+  userId: ID
+  creator: ID
+  createdAt: String
+  updatedAt: String
+  username: String!
+  overview: [String]
+  userChatUserId: ID
+}
+
+input UpdateUserInput {
+  id: ID!
+  userId: ID
+  creator: ID
+  createdAt: String
+  updatedAt: String
+  username: String
+  overview: [String]
+  userChatUserId: ID
+}
+
+input DeleteUserInput {
+  id: ID
+}
+
+type ModelConvoLinkConnection {
+  items: [ConvoLink]
+  nextToken: String
+}
+
+type ModelMessageConnection {
+  items: [Message]
+  nextToken: String
+}

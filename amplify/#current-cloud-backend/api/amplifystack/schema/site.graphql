@@ -1,0 +1,146 @@
+type Site
+	@model(subscriptions: null)
+	@auth(rules: [{ allow: groups, groups: ["Admin"] }]) {
+	id: ID
+	articles: [Article] @connection(name: "siteArticles", sortField: "updatedAt")
+	duplicateArticles: [DuplicateArticle]
+		@connection(name: "siteDuplicateArticles")
+	createdAt: String
+	description: String
+	tasks: [Task] @connection(name: "siteTasks", sortField: "updatedAt")
+	name: String
+	type: String
+	categories: [String]
+	development: Boolean!
+	production: Boolean!
+	productionId: String
+	quiz: [Quiz] @connection(name: "siteQuiz", sortField: "updatedAt")
+	duplicateQuiz: [DuplicateQuiz]
+		@connection(name: "siteDuplicateQuiz", sortField: "updatedAt")
+	slideShows: [SlideShow]
+		@connection(name: "siteSlideShows", sortField: "updatedAt")
+	duplicateSlideShows: [DuplicateSlideShow]
+		@connection(name: "siteDuplicateSlideShows", sortField: "updatedAt")
+	updatedAt: String
+}
+
+type Article
+	@model(subscriptions: null)
+	@auth(rules: [{ allow: owner }, { allow: groups, groups: ["Admin"] }]) {
+	id: ID
+	userId: ID
+	authorName: String
+	overview: [String]
+	createdAt: String
+	content: String
+	development: Boolean!
+	production: Boolean!
+	productionId: String
+	schedule: Boolean
+	scheduleTime: String
+	original: Boolean
+	duplicates: [DuplicateArticle] @connection(name: "duplicateArticles")
+	site: Site @connection(name: "siteArticles")
+	updatedAt: String
+	user: User @connection(name: "userArticles")
+}
+type DuplicateArticle
+	@model(subscriptions: null)
+	@auth(rules: [{ allow: owner }, { allow: groups, groups: ["Admin"] }]) {
+	id: ID
+	overview: [String]
+	createdAt: String
+	content: String
+	development: Boolean!
+	production: Boolean!
+	productionId: String
+	schedule: Boolean
+	scheduleTime: String
+	original: Boolean
+	originalArticle: Article @connection(name: "duplicateArticles")
+	site: Site @connection(name: "siteDuplicateArticles")
+	updatedAt: String
+	user: User @connection(name: "userDuplicateArticles")
+}
+
+type SlideShow
+	@model(subscriptions: null)
+	@auth(rules: [{ allow: owner }, { allow: groups, groups: ["Admin"] }]) {
+	id: ID
+	category: String
+	createdAt: String
+	development: Boolean!
+	overview: [String]
+	production: Boolean!
+	productionId: String
+	slides: [String]
+	numSlides: Int
+	original: Boolean
+	schedule: Boolean
+	scheduleTime: String
+	duplicates: [DuplicateSlideShow] @connection(name: "duplicateSlideShows")
+	site: Site @connection(name: "siteSlideShows")
+	user: User @connection(name: "userSlideShows")
+	updatedAt: String
+}
+type DuplicateSlideShow
+	@model(subscriptions: null)
+	@auth(rules: [{ allow: owner }, { allow: groups, groups: ["Admin"] }]) {
+	id: ID
+	category: String
+	createdAt: String
+	development: Boolean!
+	overview: [String]
+	production: Boolean!
+	productionId: String
+	slides: [String]
+	numSlides: Int
+	original: Boolean
+	originalSlideShow: SlideShow @connection(name: "duplicateSlideShows")
+	schedule: Boolean
+	scheduleTime: String
+	site: Site @connection(name: "siteDuplicateSlideShows")
+	user: User @connection(name: "userDuplicateSlideShows")
+	updatedAt: String
+}
+
+type Quiz
+	@model(subscriptions: null)
+	@auth(rules: [{ allow: owner }, { allow: groups, groups: ["Admin"] }]) {
+	id: ID
+	category: String
+	createdAt: String
+	development: Boolean!
+	overview: [String]
+	production: Boolean!
+	productionId: String
+	original: Boolean
+	questions: [String]
+	numQuestions: Int
+	schedule: Boolean
+	scheduleTime: String
+	duplicates: [DuplicateQuiz] @connection(name: "duplicateQuizzes")
+	site: Site @connection(name: "siteQuiz")
+	user: User @connection(name: "userQuiz")
+	updatedAt: String
+}
+type DuplicateQuiz
+	@model(subscriptions: null)
+	@auth(rules: [{ allow: owner }, { allow: groups, groups: ["Admin"] }]) {
+	id: ID
+	category: String
+	createdAt: String
+	development: Boolean!
+	overview: [String]
+	production: Boolean!
+	productionId: String
+	original: Boolean
+	questions: [String]
+	numQuestions: Int
+	schedule: Boolean
+	scheduleTime: String
+	originalQuiz: Quiz @connection(name: "duplicateQuizzes")
+	site: Site @connection(name: "siteDuplicateQuiz")
+	user: User @connection(name: "userDuplicateQuiz")
+	updatedAt: String
+}

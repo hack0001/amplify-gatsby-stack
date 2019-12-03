@@ -1,0 +1,23 @@
+type Task
+  @model
+  @auth(
+    rules: [
+      { allow: owner, ownerField: "userId" }
+      { allow: groups, groups: ["Admin"] }
+    ]
+  ) {
+  id: ID!
+  category: String
+  createdAt: String
+  content: String
+  site: Site @connection(name: "siteTasks")
+  siteId: ID
+  userId: ID
+  members: [String]
+  name: String
+  updatedAt: String
+  type: String
+  title: String
+  status: String
+  user: User @connection(name: "userIdeas")
+}
