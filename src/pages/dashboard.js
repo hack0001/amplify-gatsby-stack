@@ -21,11 +21,11 @@ let Dash = () => <div>Fash</div>
 
 const Dashboard = () => (
   <Router>
-    <SignUp path="/signup" />
+    {/* <SignUp path="/signup" /> */}
     <Dash path="/dashboard" />
     <PrivateRoute path="/dashboard/home" component={Home} />
     <PrivateRoute path="/dashboard/profile" component={Details} />
-    <Login path="/dashboard/login" />
+    {/* <Login path="/dashboard/login" /> */}
   </Router>
 )
 
