@@ -12,7 +12,7 @@ import React, { Fragment, useState, useEffect } from "react"
 import { Router } from "@reach/router"
 import Details from "../components/test/Details"
 import Home from "../components/test/Home"
-import Login from "../components/test/Login"
+// import Login from "../components/test/Login"
 import SignUp from "../components/test/SignUp"
 import PrivateRoute from "../components/test/PrivateRoute"
 
