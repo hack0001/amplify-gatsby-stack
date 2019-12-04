@@ -1,5 +1,5 @@
 import React, { Fragment, useState, useEffect } from "react"
-import { Router, Redirect } from "@reach/router"
+import { Router, Redirect, navigate } from "@reach/router"
 import { Auth, API, graphqlOperation } from "aws-amplify"
 import { MuiPickersUtilsProvider } from "@material-ui/pickers"
 import Image from "../components/images/image"
@@ -10,6 +10,8 @@ import DateFnUtils from "@date-io/date-fns"
 import SignIn from "../components/auth/SignIn"
 import AuthContext from "../context/authContext"
 import "../styles/App.css"
+import { setUser, isLoggedIn, logUserOut } from "../utils/auth"
+import Login from "../components/auth/Login"
 Amplify.configure(config)
 
 const IndexPage = () => {
@@ -80,6 +82,12 @@ const IndexPage = () => {
         siteNames,
         chatUserId,
       })
+
+      const userInfo = {
+        ...user.attributes,
+        username: user.username,
+      }
+      setUser(userInfo)
     } catch (err) {
       console.log("Error", err)
       setData({
@@ -129,7 +137,6 @@ const IndexPage = () => {
 				}
 			}`)
     )
-    console.log("USER DAT", userData)
     setData({
       ...data,
       token: user.signInUserSession.accessToken.jwtToken,
@@ -142,58 +149,62 @@ const IndexPage = () => {
   }
 
   const logout = async () => {
-    try {
-      await Auth.signOut()
-      setData({
-        ...data,
-        token: null,
-        userId: null,
-        admin: null,
-        username: null,
-        profileId: null,
-        siteNames: null,
-        chatUserId: null,
-      })
-    } catch (err) {
-      setData({
-        ...data,
-        logOutError:
-          "Something went wrong when trying to log out. Please try again",
-      })
+    if (isLoggedIn) {
+      try {
+        await Auth.signOut()
+        setData({
+          ...data,
+          token: null,
+          userId: null,
+          admin: null,
+          username: null,
+          profileId: null,
+          siteNames: null,
+          chatUserId: null,
+        })
+        logUserOut(() => navigate("/app/login"))
+      } catch (err) {
+        setData({
+          ...data,
+          logOutError:
+            "Something went wrong when trying to log out. Please try again",
+        })
+      }
     }
   }
 
   return (
     <Router>
-      <MuiPickersUtilsProvider utils={DateFnUtils}>
-        <AuthContext.Provider
-          value={{
-            token: data.token,
-            userId: data.userId,
-            username: data.username,
-            profileId: data.profileId,
-            siteNames: data.siteNames,
-            login: () => login,
-            logout: () => logout,
-            admin: data.admin,
-            logOutError: data.logOutError,
-            handleCurrentTab: handleCurrentTab,
-            currentTabName: data.currentTabName,
-            chatUserId: data.chatUserId,
-          }}
-        >
-          {!data.token && <SignIn path="/" />}
-          {data.token && <Redirect from="/" to="dashboard" />}
-          {/* {this.state.token && (
-									<Redirect from="/auth" to="/create/quiz" exact />
-								)}
-								{!this.state.token && (
-									<Route path="/auth" exact component={SignIn} />
-								)} */}
-        </AuthContext.Provider>
-      </MuiPickersUtilsProvider>
+      {/* <MuiPickersUtilsProvider utils={DateFnUtils}> */}
+      <AuthContext.Provider
+        value={{
+          token: data.token,
+          userId: data.userId,
+          username: data.username,
+          profileId: data.profileId,
+          siteNames: data.siteNames,
+          login: () => login,
+          logout: () => logout,
+          admin: data.admin,
+          logOutError: data.logOutError,
+          handleCurrentTab: handleCurrentTab,
+          currentTabName: data.currentTabName,
+          chatUserId: data.chatUserId,
+        }}
+      >
+        {!data.token && <SignIn path="/" />}
+        {isLoggedIn() && data.token && <Redirect from="/" to="dashboard" />}
+      </AuthContext.Provider>
+      {/* </MuiPickersUtilsProvider> */}
     </Router>
   )
 }
 
 export default IndexPage
+
+/* {this.state.token && (
+									<Redirect from="/auth" to="/create/quiz" exact />
+								)}
+								{!this.state.token && (
+									<Route path="/auth" exact component={SignIn} />
+								)} */
